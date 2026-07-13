@@ -1,0 +1,14 @@
+.DS_Store
+
+# 忽略 Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class	# 在 Java 虚拟机上运行的 Python
+
+# 忽略权重文件 (checkpoint)
+checkpoint/*
+
+# 忽略数据集和测试结果
+data/*
+results/*
+logs/*
