@@ -270,7 +270,7 @@ class WanSTVSRPipeline(BasePipeline):
         self,
         prompt="",
         negative_prompt="",
-        lq_video=None,
+        lq_video=None,      # tensor
         prompt_emb_posi=None,
         prompt_emb_nega=None,
         denoising_strength=1.0,
@@ -283,8 +283,12 @@ class WanSTVSRPipeline(BasePipeline):
         fixed_timestep=799,
         noise_step=0,     # 噪声步长, 0 表示不添加噪声
         color_fix = True,
-    ):  
-        
+    ):
+        if lq_video is None:
+            raise ValueError("lq_video must be provided.")
+        if cfg_scale < 0:
+            raise ValueError(f"cfg_scale must be non-negative, got {cfg_scale}.")
+
         # Tiler parameters
         tiler_kwargs = {"tiled": tiled, "tile_size": tile_size, "tile_stride": tile_stride}
 
@@ -311,7 +315,8 @@ class WanSTVSRPipeline(BasePipeline):
             noise_timestep = torch.full((z_l.shape[0],), noise_step, dtype=self.torch_dtype, device=self.device)
             z_in = self.scheduler.add_noise(z_l, noise, timestep=noise_timestep)
 
-        # Encode prompts  
+        # Encode the positive prompt. A precomputed embedding takes precedence
+        # over prompt text, which is useful for empty-prompt training/inference.
         if prompt_emb_posi is None:
             self.load_models_to_device(["text_encoder"])
             prompt_emb_posi = self.encode_prompt(prompt, positive=True)
@@ -320,6 +325,7 @@ class WanSTVSRPipeline(BasePipeline):
                 prompt_emb_posi = {"context": prompt_emb_posi}
             prompt_emb_posi["context"] = prompt_emb_posi["context"].to(dtype=self.torch_dtype, device=self.device)
 
+        # Negative prompt is only needed by classifier-free guidance.
         if cfg_scale != 1.0:
             if prompt_emb_nega is None:
                 self.load_models_to_device(["text_encoder"])

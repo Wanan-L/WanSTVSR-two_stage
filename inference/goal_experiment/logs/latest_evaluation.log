@@ -1,0 +1,193 @@
+[runner] starting eval GPU memory guard (~20GB)
+eval memory guard allocated 21474836480
+Loading pretrained model LPIPS from /data2/wujialing/.cache/torch/hub/pyiqa/LPIPS_v0.1_alex-df73285e.pth
+Loading pretrained model DISTS from /data2/wujialing/.cache/torch/hub/pyiqa/DISTS_weights-f5e65c96.pth
+Loading pretrained model LIQE from /data2/wujialing/.cache/torch/hub/pyiqa/liqe_koniq.pt
+Loading pretrained model MUSIQ from /data2/wujialing/.cache/torch/hub/pyiqa/musiq_koniq_ckpt-e95806b9.pth
+Loading pretrained model MANIQA from /data2/wujialing/.cache/torch/hub/pyiqa/ckpt_koniq10k.pt
+PyIQA metrics:   0%|          | 0/11 [00:00<?, ?it/s]PyIQA metrics:   9%|▉         | 1/11 [00:17<02:50, 17.02s/it]PyIQA metrics:  18%|█▊        | 2/11 [00:37<02:49, 18.85s/it]PyIQA metrics:  27%|██▋       | 3/11 [00:54<02:23, 17.99s/it]PyIQA metrics:  36%|███▋      | 4/11 [01:10<02:02, 17.51s/it]PyIQA metrics:  45%|████▌     | 5/11 [01:27<01:42, 17.06s/it]PyIQA metrics:  55%|█████▍    | 6/11 [01:44<01:25, 17.13s/it]PyIQA metrics:  64%|██████▎   | 7/11 [02:01<01:08, 17.18s/it]PyIQA metrics:  73%|███████▎  | 8/11 [02:19<00:52, 17.45s/it]PyIQA metrics:  82%|████████▏ | 9/11 [02:35<00:33, 16.95s/it]PyIQA metrics:  91%|█████████ | 10/11 [02:52<00:16, 16.85s/it]PyIQA metrics: 100%|██████████| 11/11 [02:52<00:00, 15.65s/it]
+[000.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+000 - GT => frames: 31, resolution: 1272x720
+000 - Input => frames: 31, resolution: 1272x720
+[001.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+001 - GT => frames: 31, resolution: 1272x720
+001 - Input => frames: 31, resolution: 1272x720
+[002.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+002 - GT => frames: 31, resolution: 1272x720
+002 - Input => frames: 31, resolution: 1272x720
+[003.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+003 - GT => frames: 31, resolution: 1272x720
+003 - Input => frames: 31, resolution: 1272x720
+[004.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+004 - GT => frames: 31, resolution: 1272x720
+004 - Input => frames: 31, resolution: 1272x720
+[005.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+005 - GT => frames: 31, resolution: 1272x720
+005 - Input => frames: 31, resolution: 1272x720
+[006.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+006 - GT => frames: 31, resolution: 1272x720
+006 - Input => frames: 31, resolution: 1272x720
+[007.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+007 - GT => frames: 31, resolution: 1272x720
+007 - Input => frames: 31, resolution: 1272x720
+[008.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+008 - GT => frames: 31, resolution: 1272x720
+008 - Input => frames: 31, resolution: 1272x720
+[009.mp4] Pre-alignment - GT: 32 frames, 1272x720 | Input: 31 frames, 1272x720 | crop mode: top-left
+009 - GT => frames: 31, resolution: 1272x720
+009 - Input => frames: 31, resolution: 1272x720
+EWARP:   0%|          | 0/10 [00:00<?, ?it/s]/data2/wujialing/project/STVSR/WanSTVSR/metrics/RAFT/core/raft.py:99: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/data2/wujialing/project/STVSR/WanSTVSR/metrics/RAFT/core/raft.py:110: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+/data2/wujialing/miniconda3/envs/torch2.8/lib/python3.10/site-packages/torch/functional.py:554: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:4322.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/data2/wujialing/project/STVSR/WanSTVSR/metrics/RAFT/core/raft.py:127: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast(enabled=self.args.mixed_precision):
+EWARP:  10%|█         | 1/10 [00:02<00:20,  2.27s/it]EWARP:  20%|██        | 2/10 [00:04<00:17,  2.21s/it]EWARP:  30%|███       | 3/10 [00:06<00:15,  2.21s/it]EWARP:  40%|████      | 4/10 [00:08<00:13,  2.20s/it]EWARP:  50%|█████     | 5/10 [00:10<00:10,  2.18s/it]EWARP:  60%|██████    | 6/10 [00:13<00:08,  2.17s/it]EWARP:  70%|███████   | 7/10 [00:15<00:06,  2.18s/it]EWARP:  80%|████████  | 8/10 [00:17<00:04,  2.20s/it]EWARP:  90%|█████████ | 9/10 [00:19<00:02,  2.18s/it]EWARP: 100%|██████████| 10/10 [00:21<00:00,  2.18s/it]EWARP: 100%|██████████| 10/10 [00:21<00:00,  2.19s/it]
+divided
+None False
+Setting backbone: technical_backbone
+divided
+Using Imagenet 22K pretrain False
+Setting backbone: aesthetic_backbone
+Setting head: technical_head
+Setting head: aesthetic_head
+Fully supervised: False
+technical branch sampled frames: [166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183
+ 184 185 186 187 188 189 190 191 192 193 194 195 196 197]
+aesthetic branch sampled frames: [  2   9  14  25  31  39  45  53  56  64  71  80  88  95 101 107 116 119
+ 130 137 144 147 154 165 171 177 185 191 198 204 214 218]
+10
+DOVER:   0%|          | 0/10 [00:00<?, ?it/s]/data2/wujialing/miniconda3/envs/torch2.8/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py:929: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.5 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  return fn(*args, **kwargs)
+/data2/wujialing/miniconda3/envs/torch2.8/lib/python3.10/site-packages/torch/utils/checkpoint.py:85: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+  warnings.warn(
+DOVER:  10%|█         | 1/10 [00:01<00:11,  1.33s/it]DOVER:  50%|█████     | 5/10 [00:02<00:01,  2.83it/s]DOVER:  90%|█████████ | 9/10 [00:02<00:00,  3.59it/s]DOVER: 100%|██████████| 10/10 [00:03<00:00,  3.25it/s]
+swin_tiny_grpb
+None False
+Setting backbone: fragments_backbone
+FastVQA:   0%|          | 0/10 [00:00<?, ?it/s]FastVQA:  10%|█         | 1/10 [00:00<00:02,  3.82it/s]FastVQA:  20%|██        | 2/10 [00:00<00:02,  3.81it/s]FastVQA:  30%|███       | 3/10 [00:00<00:01,  3.78it/s]FastVQA:  40%|████      | 4/10 [00:01<00:01,  3.71it/s]FastVQA:  50%|█████     | 5/10 [00:01<00:01,  3.95it/s]FastVQA:  60%|██████    | 6/10 [00:01<00:00,  4.15it/s]FastVQA:  70%|███████   | 7/10 [00:01<00:00,  4.10it/s]FastVQA:  80%|████████  | 8/10 [00:02<00:00,  3.74it/s]FastVQA:  90%|█████████ | 9/10 [00:02<00:00,  3.97it/s]FastVQA: 100%|██████████| 10/10 [00:02<00:00,  3.79it/s]FastVQA: 100%|██████████| 10/10 [00:02<00:00,  3.87it/s]
+8 7 7
+Failed to compute VBench: cannot import name 'calculate_final' from 'evaluate' (/data2/wujialing/project/STVSR/WanSTVSR/metrics/VBench/evaluate.py)
+MDVQA:   0%|          | 0/10 [00:00<?, ?it/s]MDVQA:  10%|█         | 1/10 [00:10<01:30, 10.11s/it]MDVQA:  20%|██        | 2/10 [00:12<00:44,  5.62s/it]MDVQA:  30%|███       | 3/10 [00:14<00:28,  4.06s/it]MDVQA:  40%|████      | 4/10 [00:16<00:19,  3.23s/it]MDVQA:  50%|█████     | 5/10 [00:18<00:13,  2.71s/it]MDVQA:  60%|██████    | 6/10 [00:20<00:09,  2.39s/it]MDVQA:  70%|███████   | 7/10 [00:22<00:06,  2.20s/it]MDVQA:  80%|████████  | 8/10 [00:23<00:04,  2.08s/it]MDVQA:  90%|█████████ | 9/10 [00:25<00:02,  2.02s/it]MDVQA: 100%|██████████| 10/10 [00:27<00:00,  1.97s/it]MDVQA: 100%|██████████| 10/10 [00:27<00:00,  2.77s/it]
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.36
+start extract tradition features...
+time of tradition feature generation: 1.34
+start extract semantic features...
+time of semantic feature generation: 7.9
+start extract motion features...
+time of motion feature generation: 0.49
+outputs: {"score": "80.24", "video": "results_test/UDM10/temp_for_video_metrics/000.mp4", "shakiness": "13.200907", "over_index": "11.417238", "under_index": "0.019408401", "sharpness": "119.89898", "noise": "0", "blockiness": "0.18301827", "colorfullness": "0.044689834", "version": "mdvqa_cvpr", "read_video_rt": "0.36", "trad_rt": "1.34", "semantic_rt": "7.9", "motion_rt": "0.49", "fusion_rt": "0.01", "task_rt": "10.11"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.77
+start extract tradition features...
+time of tradition feature generation: 1.43
+start extract semantic features...
+time of semantic feature generation: 0.17
+start extract motion features...
+time of motion feature generation: 0.09
+outputs: {"score": "79.34", "video": "results_test/UDM10/temp_for_video_metrics/001.mp4", "shakiness": "7.685847", "over_index": "11.816753", "under_index": "8.282668e-05", "sharpness": "67.820526", "noise": "0", "blockiness": "0.14229289", "colorfullness": "0.12566921", "version": "mdvqa_cvpr", "read_video_rt": "0.77", "trad_rt": "1.43", "semantic_rt": "0.17", "motion_rt": "0.09", "fusion_rt": "0.01", "task_rt": "2.47"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.2
+start extract tradition features...
+time of tradition feature generation: 1.75
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "86.02", "video": "results_test/UDM10/temp_for_video_metrics/002.mp4", "shakiness": "10.339253", "over_index": "10.531106", "under_index": "0.088180706", "sharpness": "95.3542", "noise": "0", "blockiness": "0.18922313", "colorfullness": "0.020163931", "version": "mdvqa_cvpr", "read_video_rt": "0.2", "trad_rt": "1.75", "semantic_rt": "0.16", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "2.21"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.36
+start extract tradition features...
+time of tradition feature generation: 1.34
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "88.25", "video": "results_test/UDM10/temp_for_video_metrics/003.mp4", "shakiness": "6.256294", "over_index": "10.756024", "under_index": "0.020013805", "sharpness": "104.760895", "noise": "0", "blockiness": "0.44895995", "colorfullness": "0.010176375", "version": "mdvqa_cvpr", "read_video_rt": "0.36", "trad_rt": "1.34", "semantic_rt": "0.16", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "1.95"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.21
+start extract tradition features...
+time of tradition feature generation: 1.32
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.09
+outputs: {"score": "86.61", "video": "results_test/UDM10/temp_for_video_metrics/004.mp4", "shakiness": "16.382074", "over_index": "11.057554", "under_index": "0.00052383397", "sharpness": "100.4563", "noise": "0", "blockiness": "0.15413773", "colorfullness": "0.14801654", "version": "mdvqa_cvpr", "read_video_rt": "0.21", "trad_rt": "1.32", "semantic_rt": "0.16", "motion_rt": "0.09", "fusion_rt": "0.01", "task_rt": "1.79"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.21
+start extract tradition features...
+time of tradition feature generation: 1.28
+start extract semantic features...
+time of semantic feature generation: 0.18
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "80.3", "video": "results_test/UDM10/temp_for_video_metrics/005.mp4", "shakiness": "16.910887", "over_index": "11.799858", "under_index": "0.01972147", "sharpness": "112.29463", "noise": "0", "blockiness": "0.15917484", "colorfullness": "0.0065459013", "version": "mdvqa_cvpr", "read_video_rt": "0.21", "trad_rt": "1.28", "semantic_rt": "0.18", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "1.76"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.24
+start extract tradition features...
+time of tradition feature generation: 1.29
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "86.38", "video": "results_test/UDM10/temp_for_video_metrics/006.mp4", "shakiness": "8.120331", "over_index": "10.905668", "under_index": "0.09999762", "sharpness": "103.10298", "noise": "0", "blockiness": "0.31759763", "colorfullness": "0.005221", "version": "mdvqa_cvpr", "read_video_rt": "0.24", "trad_rt": "1.29", "semantic_rt": "0.16", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "1.79"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.33
+start extract tradition features...
+time of tradition feature generation: 1.26
+start extract semantic features...
+time of semantic feature generation: 0.15
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "82.79", "video": "results_test/UDM10/temp_for_video_metrics/007.mp4", "shakiness": "6.6719055", "over_index": "11.647228", "under_index": "0.00016661079", "sharpness": "84.902115", "noise": "0", "blockiness": "0.28435057", "colorfullness": "0.0005746983", "version": "mdvqa_cvpr", "read_video_rt": "0.33", "trad_rt": "1.26", "semantic_rt": "0.15", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "1.84"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.22
+start extract tradition features...
+time of tradition feature generation: 1.41
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.08
+outputs: {"score": "81.95", "video": "results_test/UDM10/temp_for_video_metrics/008.mp4", "shakiness": "9.686732", "over_index": "11.087423", "under_index": "0.007320797", "sharpness": "130.99435", "noise": "0", "blockiness": "0.16446355", "colorfullness": "0.106602676", "version": "mdvqa_cvpr", "read_video_rt": "0.22", "trad_rt": "1.41", "semantic_rt": "0.16", "motion_rt": "0.08", "fusion_rt": "0.01", "task_rt": "1.89"}
+start read video...
+color_video: 16x(720, 1272, 3), video_time: 1.9375
+time of read video: 0.26
+start extract tradition features...
+time of tradition feature generation: 1.35
+start extract semantic features...
+time of semantic feature generation: 0.16
+start extract motion features...
+time of motion feature generation: 0.09
+outputs: {"score": "89.28", "video": "results_test/UDM10/temp_for_video_metrics/009.mp4", "shakiness": "7.9079056", "over_index": "11.393242", "under_index": "0.06983887", "sharpness": "130.49484", "noise": "0", "blockiness": "0.2100877", "colorfullness": "0.035681814", "version": "mdvqa_cvpr", "read_video_rt": "0.26", "trad_rt": "1.35", "semantic_rt": "0.16", "motion_rt": "0.09", "fusion_rt": "0.01", "task_rt": "1.87"}
+Average metrics:
+{
+  "psnr": 25.888013759736094,
+  "ssim": 0.773311898411859,
+  "lpips": 0.25614085384914953,
+  "dists": 0.1218177172445482,
+  "clipiqa": 0.39147562293275706,
+  "clipiqa+": 0.5553008954371176,
+  "niqe": 4.665208344185816,
+  "ilniqe": 30.135187597534877,
+  "liqe": 3.1418660717625775,
+  "musiq": 66.69095059056436,
+  "maniqa": 0.31758459945840223,
+  "brisque": 27.902953707787297,
+  "dover": 0.6107071727514267,
+  "ewarp": 0.0019478212133011157,
+  "fastvqa": 0.7753740948593173,
+  "mdvqa": 84.11600000000001
+}
+Evaluation complete. Results saved to results_test/UDM10/all_metrics_results.json

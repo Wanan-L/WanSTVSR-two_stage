@@ -16,8 +16,11 @@ import argparse
 import json
 import os
 import sys
-sys.path.append('/data2/wujialing/project/STVSR/WanSTVSR')
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 import torch
 from tqdm import tqdm
@@ -26,6 +29,8 @@ from diffsynth import ModelManager
 from diffsynth.pipelines.wan_stvsr import WanSTVSRPipeline
 from dataset.utils import prepare_input_tensor, scan_video_or_frame_dirs, save_video
 
+from utils.checkpoint_utils import load_checkpoint_state_dict
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="WanSTVSR inference script")
@@ -33,7 +38,13 @@ def parse_args() -> argparse.Namespace:
     # Model paths. 
     parser.add_argument('--wan_model_path', type=str, default='./model_checkpoints/Wan2.1-T2V-1.3B')
     parser.add_argument('--wanstvsr_model_path', type=str, required=True)
-    parser.add_argument('--empty_prompt_embedding_path', type=str, default=None)
+    parser.add_argument(
+        '--empty_prompt_embedding_path', type=str, default=None,
+        help=(
+            "Optional precomputed positive embedding. When provided, --prompt and per-video captions are ignored,"
+            "but --negative_prompt can still be encoded when CFG is enabled."
+        ),
+    )
 
     # Input / output.
     parser.add_argument('--video_path', type=str, default='./VideoLQ/lq')
@@ -55,11 +66,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tile_stride_height", type=int, default=18)
     parser.add_argument("--tile_stride_width", type=int, default=16)
 
-    # Prompt options. With --empty_prompt_embedding_path, prompt text is ignored for positive context.
-    parser.add_argument("--prompt", type=str, default="")
+    # Prompt options. Set cfg_scale != 1 to enable negative-prompt CFG.
     parser.add_argument(
-        "--negative_prompt",
-        type=str,
+        "--prompt", type=str, default="",
+        help="Positive text prompt. Ignored when --empty_prompt_embedding_path is set.",
+    )
+    parser.add_argument(
+        "--negative_prompt", type=str,
         default="色调艳丽，过曝，静态，细节模糊不清，画面，整体发灰，最差质量，低质量，JPEG压缩残留，丑陋的，残缺的，畸形的，杂乱的背景",
     )   # cfg !=1 时才会使用
 
@@ -67,13 +80,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dtype", type=str, default="bf16", choices=["bf16", "fp16", "fp32"])
     parser.add_argument('--fps', type=int, default=16)
     parser.add_argument('--video_quality', type=int, default=9)
-    parser.add_argument('--color_fix', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--color_fix', action="store_true", default=False)
     parser.add_argument('--device', type=str, default='cuda')
     return parser.parse_args()
 
 def load_dit_checkpoint(pipe, ckpt_path):
-    ckpt = torch.load(ckpt_path, map_location='cpu', weights_only=False)
-    state_dict = ckpt.get('state_dict', ckpt) if isinstance(ckpt, dict) else ckpt
+    state_dict = load_checkpoint_state_dict(ckpt_path)
+    if not isinstance(state_dict, dict):
+        raise RuntimeError(f"Checkpoint is not a state_dict-like object: {ckpt_path}")
 
     replace_state_dict = {}
     for k, v in state_dict.items():
@@ -143,13 +157,17 @@ def get_torch_dtype(dtype: str):
 def main() -> None:
     args = parse_args()
     torch_dtype = get_torch_dtype(args.dtype)
+    if args.cfg_scale < 0:
+        raise ValueError(f"--cfg_scale must be non-negative, got {args.cfg_scale}.")
 
     model_paths = [
         os.path.join(args.wan_model_path, 'diffusion_pytorch_model.safetensors'),
         os.path.join(args.wan_model_path, "Wan2.1_VAE.safetensors")
     ]
-    if args.empty_prompt_embedding_path is None:
-        model_paths.append(os.path.join(args.wan_model_path, 'models_t5_umt5-xxl-enc-bf16.pth'))
+    # Positive prompt text needs T5 when no embedding is supplied.
+    # Negative prompt text also needs T5 whenever CFG is enabled.
+    if args.empty_prompt_embedding_path is None or args.cfg_scale != 1.0:
+        model_paths.append(os.path.join(args.wan_model_path, 'models_t5_umt5-xxl-enc-bf16.safetensors'))
 
     model_manager = ModelManager(torch_dtype=torch_dtype, device='cpu')
     model_manager.load_models(model_paths)
@@ -160,6 +178,8 @@ def main() -> None:
     pipe.eval()
     pipe.dit.to(device=args.device, dtype=torch_dtype).eval()
     pipe.vae.to(device=args.device, dtype=torch_dtype).eval()
+    if pipe.text_encoder is not None:
+        pipe.text_encoder.to(device=args.device, dtype=torch_dtype).eval()
     # pipe.denoising_model().to(dtype=torch_dtype).eval()
     # pipe.enable_vram_management()   # dit, vae
 
@@ -169,8 +189,12 @@ def main() -> None:
     os.makedirs(args.save_path, exist_ok=True)
 
     for video_file in tqdm(video_files):
-        print(f'Processing: {video_file}')
+        print(f'Processing: {video_file}', flush=True)  # flush 打印后立刻把输出缓冲区刷新到终端或日志中
         prompt = load_caption(args.caption_path, video_file.stem, args.prompt)
+
+        positive_source = (f"embedding: {args.empty_prompt_embedding_path}" if prompt_emb_posi is not None else f"text: {prompt!r}")
+        negative_source = (repr(args.negative_prompt) if args.cfg_scale != 1.0 else "disabled (cfg_scale=1)")
+        print(f"[Prompt] positive={positive_source}, negative={negative_source}, cfg_scale={args.cfg_scale}", flush=True)
 
         lq_video, input_fps = prepare_input_tensor(
             str(video_file),
@@ -182,18 +206,15 @@ def main() -> None:
         # print("[After prepare_input_tensor]", lq_video.shape)
 
         print(
-            f"[Preprocessed LQ] shape={tuple(lq_video.shape)}, "
-            f"dtype={lq_video.dtype}, "
-            f"range=({lq_video.min().item():.4f}, {lq_video.max().item():.4f})"
+            f"[Preprocessed LQ] shape={tuple(lq_video.shape)}, dtype={lq_video.dtype}, "
+            f"range=({lq_video.min().item():.4f}, {lq_video.max().item():.4f})",
+            flush=True
         )
 
         preprocess_save_dir = os.path.join(args.save_path, "preprocessed_lq")
-        preprocess_save_path = os.path.join(
-            preprocess_save_dir,
-            f"{video_file.stem}.mp4",
-        )
+        preprocess_save_path = os.path.join(preprocess_save_dir,f"{video_file.stem}.mp4",)
 
-        save_video(lq_video, preprocess_save_path, fps=input_fps * args.temporal_scale)
+        # save_video(lq_video, preprocess_save_path, fps=input_fps * args.temporal_scale)
 
         with torch.no_grad():
             pred_video = pipe.test(

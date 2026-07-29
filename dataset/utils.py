@@ -16,7 +16,7 @@ import imageio.v3 as iio
 decord.bridge.set_bridge("torch")
 
 VIDEO_EXTS = (".mp4", ".mov", ".avi", ".mkv", ".webm")
-IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".bmp", ".webp")
+IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".bmp", '.tiff', ".webp")
 
 def is_video(path): 
     return os.path.isfile(path) and path.lower().endswith(VIDEO_EXTS)
@@ -41,6 +41,42 @@ def bcthw_to_fchw_01(video: torch.Tensor) -> torch.Tensor:
     video = video[0].float().clamp(-1, 1)
     video = ((video + 1.0) * 0.5).clamp(0, 1)
     return video.permute(1, 0, 2, 3).contiguous()
+
+
+def scan_video_or_frame_dirs(
+    root: str | Path,
+    video_exts: Sequence[str] = VIDEO_EXTS,
+    image_exts: Sequence[str] = IMAGE_EXTS,
+) -> List[Path]:
+    """Scan video or frame directories. Returns a list of paths."""
+    root = Path(root)
+    if not root.exists():
+        return []
+
+    samples: List[Path] = []
+    for path in sorted(root.rglob("*")):
+        if path.is_file() and path.suffix.lower() in video_exts:
+            samples.append(path)
+        elif path.is_dir() and any(
+            p.is_file() and p.suffix.lower() in image_exts
+            for p in path.iterdir()
+        ):
+            samples.append(path)
+
+    return samples
+
+def scan_images(data_root: str | Path, image_exts: Sequence[str] = IMAGE_EXTS) -> List[Path]:
+    """Recursively scan standalone image files in deterministic order."""
+    data_root = Path(data_root)
+    if not data_root.exists():
+        return []
+
+    return sorted(
+        path
+        for path in data_root.rglob("*")
+        if path.is_file() and path.suffix.lower() in image_exts
+    )
+
 
 def read_video_as_tensor(video_path: str | Path, dtype: torch.dtype = torch.bfloat16, device: str | torch.device = "cuda"):
     """Read a video as [1, C, T, H, W], range [-1, 1]."""
@@ -109,7 +145,6 @@ def resize_video_bcthw(
     spatial_scale: int | None = None,
     temporal_scale: int | None = None,
     mode_spatial: str = "bicubic",
-    mode_temporal: str = "trilinear",
 ) -> torch.Tensor:
     """Resize [B,C,T,H,W] video in temporal and spatial dimensions.The input and output value range are unchanged, e.g. [-1,1]."""
     
@@ -139,6 +174,7 @@ def resize_video_bcthw(
 
     return video.contiguous()
 
+
 def prepare_input_tensor(
     lq_path: str | Path,
     dtype: torch.dtype = torch.bfloat16,
@@ -146,65 +182,85 @@ def prepare_input_tensor(
     spatial_scale: int = 4,
     temporal_scale: int = 2,
     mode_spatial: str = "bicubic",
-    mode_temporal: str = "trilinear",
 ):
     """Read raw degraded LQ video and upsample it to WanSTVSR model input size."""
     lq_video, fps = read_video_as_tensor(lq_path, dtype=dtype, device=device)
 
-    lq_video = resize_video_bcthw(lq_video, spatial_scale, temporal_scale, mode_spatial, mode_temporal)
+    lq_video = resize_video_bcthw(lq_video, spatial_scale, temporal_scale, mode_spatial)
 
     return lq_video.to(dtype=dtype, device=device).clamp(-1, 1), fps
 
 
-def read_video_or_frame_dir(path, frame_size=None, image_exts=IMAGE_EXTS):
-    """Read a video file or frame directory as RGB uint8 frames, padding to frame_size if needed."""
-    path = Path(path)
+def read_video_frames(video_path, frame_size=None, image_exts=IMAGE_EXTS):
+    """
+    Read a video file or frame directory Read video and pad frames if necessary.
+    Returns:
+        list of np.ndarray: Each frame is [H, W, C], dtype=uint8"""
+    video_path = Path(video_path)
     frames = []
 
-    if path.is_dir():
-        files = [p for p in sorted(path.iterdir()) if p.suffix.lower() in image_exts]
+    if video_path.is_dir():
+        files = [p for p in sorted(video_path.iterdir()) if p.suffix.lower() in image_exts]
         for file in files:
             frame = cv2.imread(str(file), cv2.IMREAD_COLOR)
             if frame is None:
                 raise RuntimeError(f"Failed to read image frame: {file}")
             frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
     else:
-        video_reader = decord.VideoReader(path.as_posix())
-        if len(video_reader) > 0:
-            frames = video_reader.get_batch(list(range(len(video_reader)))).numpy()
-            frames = [frame for frame in frames]
+        try:
+            video_reader = decord.VideoReader(video_path.as_posix())
+            if len(video_reader) > 0:
+                frames = video_reader.get_batch(list(range(len(video_reader)))).numpy()
+                frames = [frame for frame in frames]
+        except Exception as error:
+            raise RuntimeError(f"Decord failed to read video: {video_path}") from error
 
     if len(frames) == 0:
-        raise RuntimeError(f"No frames read from: {path}")
+        raise RuntimeError(f"No frames read from: {video_path}")
     
     if frame_size is not None and len(frames) < frame_size:
-        logging.warning("Sample %s has %d frames, padding to %d", path, len(frames), frame_size)
+        logging.warning("Sample %s has %d frames, padding to %d", video_path, len(frames), frame_size)
         last_frame = frames[-1]
         frames.extend([last_frame.copy() for _ in range(frame_size - len(frames))])
 
     return frames
 
-def scan_video_or_frame_dirs(
-    root: str | Path,
-    video_exts: Sequence[str] = VIDEO_EXTS,
-    image_exts: Sequence[str] = IMAGE_EXTS,
-) -> List[Path]:
-    """Scan video or frame directories. Returns a list of paths."""
-    root = Path(root)
-    if not root.exists():
-        return []
 
-    samples: List[Path] = []
-    for path in sorted(root.rglob("*")):
-        if path.is_file() and path.suffix.lower() in video_exts:
-            samples.append(path)
-        elif path.is_dir() and any(
-            p.is_file() and p.suffix.lower() in image_exts
-            for p in path.iterdir()
-        ):
-            samples.append(path)
+def read_video_or_image(input_path, frame_size=None, video_exts=VIDEO_EXTS, image_exts=IMAGE_EXTS):
+    """
+    Read frames from a video file or a single image.
 
-    return samples
+    Args:
+        input_path (str or Path): Path to a video or image file.
+        frame_size (int, optional): Desired number of frames. If fewer, pad with the last frame.
+
+    Returns:
+        list of np.ndarray: Each frame is [H, W, C], dtype=uint8
+    """
+    if isinstance(input_path, str):
+        input_path = Path(input_path)
+    
+    if input_path.suffix.lower() in video_exts:
+        # Read from video
+        video_reader = decord.VideoReader(str(input_path))
+        frames = video_reader.get_batch(list(range(len(video_reader)))).numpy()
+        frame_list = [frame for frame in frames]
+    elif input_path.suffix.lower() in image_exts:
+        # Read from single image
+        img = Image.open(input_path).convert("RGB")
+        frame_np = np.array(img, dtype=np.uint8)
+        frame_list = [frame_np]
+    else:
+        raise ValueError(f"Unsupported file type: {input_path.suffix}")
+    
+    # 帧数不足时使用最后一帧补齐
+    if frame_size is not None and len(frame_list) < frame_size:
+        logging.warning("Sample %s has %d frames, padding to %d", input_path, len(frame_list), frame_size)
+        last_frame = frame_list[-1]
+        frame_list.extend([last_frame.copy() for _ in range(frame_size - len(frames))])
+
+    return frame_list  # [F, H, W, C] uint8
+
 
 def random_crop_frames(
     frames: List[np.ndarray],
@@ -266,6 +322,7 @@ def paired_random_crop_video(
     ]
 
     return cropped_hq, cropped_lq
+
 
 def save_video(video: torch.Tensor, path: str, fps: float):
     if video.dim() == 5:

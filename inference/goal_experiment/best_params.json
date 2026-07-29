@@ -1,0 +1,13 @@
+{
+  "cfg_scale": 6.0,
+  "composite_relative_gain": 5.3355899094616,
+  "iteration": 325,
+  "metrics_beating_osd": 5,
+  "metrics_gain_ge_2pct": 3,
+  "negative_prompt": "low quality, blurry, dull, flat, ugly, noisy, flicker, ghosting, artifacts",
+  "output_video_path": "results_test/goal_experiment/best/iteration_0325",
+  "prompt": "高审美质量、自然清晰、真实色彩的视频恢复，保持输入内容不变，使画面观感干净、舒适、细节可信、边缘稳定。 High aesthetic quality faithful video restoration with natural clarity, realistic color, clean pleasing appearance, credible detail, and stable edges.",
+  "psnr_delta_db": -0.5729806764664183,
+  "success_conditions_met": false,
+  "timestamp": "2026-07-27T20:14:53+00:00"
+}

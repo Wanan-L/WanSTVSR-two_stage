@@ -1,0 +1,78 @@
+Loading models from: /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/diffusion_pytorch_model.safetensors
+    model_name: wan_video_dit model_class: WanModel
+        This model is initialized with extra kwargs: {'has_image_input': False, 'patch_size': [1, 2, 2], 'in_dim': 16, 'dim': 1536, 'ffn_dim': 8960, 'freq_dim': 256, 'text_dim': 4096, 'out_dim': 16, 'num_heads': 12, 'num_layers': 30, 'eps': 1e-06}
+    The following models are loaded: ['wan_video_dit'].
+Loading models from: /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/Wan2.1_VAE.safetensors
+    model_name: wan_video_vae model_class: WanVideoVAE
+    The following models are loaded: ['wan_video_vae'].
+Loading models from: /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/models_t5_umt5-xxl-enc-bf16.safetensors
+    model_name: wan_video_text_encoder model_class: WanTextEncoder
+    The following models are loaded: ['wan_video_text_encoder'].
+Using wan_video_text_encoder from /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/models_t5_umt5-xxl-enc-bf16.safetensors.
+Using wan_video_dit from /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/diffusion_pytorch_model.safetensors.
+Using wan_video_vae from /data2/wujialing/pretrained_weights/DiffSynth-Studio/Wan-AI/Wan2.1-T2V-1.3B/Wan2.1_VAE.safetensors.
+Loaded checkpoint: checkpoint/wanstvsr_baseline-v2-two_stage2-init_from_stage1_18000/tensorboardlog/WanSTVSR-baseline-v2-two_stage2-init_from_stage1_18000/version_0/checkpoints/epoch=31-step=4000.ckpt/output_dir
+missing keys: 0, unexpected keys: 57
+  0%|          | 0/10 [00:00<?, ?it/s]Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/000.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+/data2/wujialing/project/STVSR/WanSTVSR-0713/dataset/utils.py:26: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:203.)
+  t = torch.from_numpy(np.asarray(img, np.uint8)).to(device=device, dtype=torch.float32)
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 10%|█         | 1/10 [00:10<01:32, 10.26s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/001.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 0.4355)
+ 20%|██        | 2/10 [00:19<01:18,  9.79s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/002.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 30%|███       | 3/10 [00:29<01:08,  9.83s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/003.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 40%|████      | 4/10 [00:39<00:58,  9.73s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/004.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 0.6836)
+ 50%|█████     | 5/10 [00:48<00:47,  9.57s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/005.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 60%|██████    | 6/10 [00:57<00:38,  9.55s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/006.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 70%|███████   | 7/10 [01:07<00:28,  9.56s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/007.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 0.9453)
+ 80%|████████  | 8/10 [01:17<00:19,  9.77s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/008.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+ 90%|█████████ | 9/10 [01:27<00:09,  9.80s/it]The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.
+Processing: /data2/wujialing/data/VSR/UDM10/LQ-Video-temporal/009.mkv
+[Prompt] positive=text: 'photorealistic high image quality video restoration, natural sharpness, vivid but realistic colors, balanced contrast, clean pleasing frames, faithful original content, stable motion', negative='', cfg_scale=4.75
+[Preprocessed LQ] shape=(1, 3, 31, 720, 1272), dtype=torch.bfloat16, range=(-1.0000, 1.0000)
+100%|██████████| 10/10 [01:38<00:00,  9.99s/it]100%|██████████| 10/10 [01:38<00:00,  9.81s/it]
+The height cannot be evenly divided by 16. We round it up to 720.
+The width cannot be evenly divided by 16. We round it up to 1280.
+Only `num_frames % 4 != 1` is acceptable. We round it up to 33.

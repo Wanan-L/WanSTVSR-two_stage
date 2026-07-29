@@ -17,7 +17,7 @@ from .random_degradations import (
     RandomResize,
     RandomVideoCompression,
 )
-from .utils import paired_random_crop_video, random_crop_frames, read_video_or_frame_dir, scan_video_or_frame_dirs, temporal_blending
+from .utils import paired_random_crop_video, random_crop_frames, read_video_frames, scan_video_or_frame_dirs, temporal_blending
 
 
 class SpatioTemporalRealSRDataset(Dataset):
@@ -29,13 +29,11 @@ class SpatioTemporalRealSRDataset(Dataset):
       3. run the two-stage RealBasicVSR degradation pipeline on the cropped HQ clip;
       4. paired crop HQ/LQ to the final training resolution;
       5. uniformly keep every `temporal_scale`-th LQ frame;
-      6. bilinearly upsample spatially and trilinearly interpolate temporally to build `lq_video`.
+      6. bilinearly upsample spatially and blending interpolate temporally to build `lq_video`.
 
     Returned HQ and LQ tensors are both in [C, T, H, W], normalized to [-1, 1] for Wan VAE input.
     `lq_video` is already upsampled back to the HQ spatial size and frame count.
     """
-
-    video_exts = (".mp4", ".mov", ".avi", ".mkv", ".webm")
 
     def __init__(
         self,
@@ -114,7 +112,7 @@ class SpatioTemporalRealSRDataset(Dataset):
         }
 
     def preprocess(self, video_path: Path) -> Tuple[torch.Tensor, torch.Tensor]:
-        frame_list = read_video_or_frame_dir(video_path, self.inter_frames, self.image_exts)
+        frame_list = read_video_frames(video_path, self.inter_frames, self.image_exts)
         crop_frame_list = random_crop_frames(frame_list, self.inter_frames, self.inter_height, self.inter_width)
         inter_h, inter_w, _ = crop_frame_list[0].shape
         inter_target_h = inter_h // self.spatial_scale

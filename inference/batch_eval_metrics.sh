@@ -11,13 +11,13 @@ DATASETS_X4=("UDM10" "SPMCS")
 # "UDM10" "SPMCS" "YouHQ40" "REDS"
 # "RealVSR" "MVSR4x"
 
-GPU_ID="4"
+GPU_ID="1"
 INPUT_ROOT="/data2/wujialing/data/VSR"
-RESULT_ROOT="results"
+RESULT_ROOT="results-stage1_18000-stage2_4000"
 
 METRICS="psnr,ssim,lpips,dists,clipiqa,clipiqa+,niqe,ilniqe,liqe,musiq,maniqa,brisque,dover,ewarp,vbench,fastvqa,mdvqa"
 
-mkdir -p "logs"
+mkdir -p "logs-stage1_18000-stage2_4000"
 
 run_eval_metrics() {
     local dataset="$1"
@@ -36,7 +36,7 @@ run_eval_metrics() {
     --gt "$gt_dir" \
     --out "$out_dir" \
     --metrics "$METRICS" \
-    --filename all_metrics_results.json > "logs/eval_metrics_${dataset}.log" 2>&1
+    --filename all_metrics_results.json > "logs-stage1_18000-stage2_4000/eval_metrics_${dataset}.log" 2>&1
 }
 
 for dataset in "${DATASETS_X4[@]}"; do
